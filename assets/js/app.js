@@ -38,8 +38,12 @@ function addTweet(e) {
   // Add delete button tweet
   li.appendChild(deleteButton)
   tweetsList.appendChild(li)
+
+  // Add to local storage
+  addTweetLocalStorage(tweet)
 }
 
+// Remove the tweet from the DOM
 function deleteTweet(e) {
   e.preventDefault()
   if(e.target.className === 'delete-tweet') {
@@ -47,3 +51,29 @@ function deleteTweet(e) {
     alert('Tweet Deleted')
   }
 }
+
+// Add tweets to local storage
+function addTweetLocalStorage(tweet) {
+  let tweets
+  tweets = getLocalStorageTweets(tweet)
+  
+  // Add new tweet
+  tweets.push(tweet)
+
+  // String to array
+  localStorage.setItem('tweets', JSON.stringify(tweets))
+}
+
+function getLocalStorageTweets() {
+  let tweets
+
+  // we check the local storage values
+  if(localStorage.getItem('tweets') === null) {
+    tweets = []
+  } else {
+    tweets = JSON.parse(localStorage.getItem('tweets'))
+  }
+  return tweets
+}
+
+
