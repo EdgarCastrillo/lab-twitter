@@ -14,6 +14,8 @@ function eventListeners() {
   // Delete tweets
   tweetsList.addEventListener('click', deleteTweet)
 
+  // Loaded content
+  document.addEventListener('DOMContentLoaded', localStorageReady)
 }
 
 
@@ -48,9 +50,31 @@ function deleteTweet(e) {
   e.preventDefault()
   if(e.target.className === 'delete-tweet') {
     e.target.parentElement.remove()
-    alert('Tweet Deleted')
+    deleteTweetLocalStorage(e.target.parentElement.innerText)
   }
 }
+
+// Show local storage data in the list
+function localStorageReady() {
+  let tweets
+  tweets = getLocalStorageTweets()
+
+  tweets.forEach(function(tweet) {
+      // Create delete button
+    const deleteButton = document.createElement('a')
+    deleteButton.classList = 'delete-tweet'
+    deleteButton.innerText = 'X'
+
+    // Create element and add to list
+    const li = document.createElement('li')
+    li.innerText = tweet
+
+    // Add delete button tweet
+    li.appendChild(deleteButton)
+    tweetsList.appendChild(li) 
+  });
+}
+
 
 // Add tweets to local storage
 function addTweetLocalStorage(tweet) {
@@ -60,10 +84,11 @@ function addTweetLocalStorage(tweet) {
   // Add new tweet
   tweets.push(tweet)
 
-  // String to array
+  // String to array (object)
   localStorage.setItem('tweets', JSON.stringify(tweets))
 }
 
+// Check that there are items in local storage. Returns an array.
 function getLocalStorageTweets() {
   let tweets
 
@@ -76,4 +101,19 @@ function getLocalStorageTweets() {
   return tweets
 }
 
+// Delete tweet to local storage
+function deleteTweetLocalStorage(tweet) {
+  let tweets
+  let tweetToDelete
 
+  // Delete X to tweet
+  tweetToDelete = tweet.substring(0, tweet.length - 1)
+
+  tweets = getLocalStorageTweets()
+  tweets.forEach(function(tweet, index) {
+    if(tweetToDelete === tweet) {
+      tweets.splice(index, 1)
+    }
+  })
+  localStorage.setItem('tweets', JSON.stringify(tweets))
+}
