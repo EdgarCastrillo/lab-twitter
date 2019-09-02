@@ -10,6 +10,10 @@ eventListeners()
 function eventListeners() {
   // When you send the form
   document.querySelector('#form').addEventListener('submit', addTweet)
+
+  // Delete tweets
+  tweetsList.addEventListener('click', deleteTweet)
+
 }
 
 
@@ -34,4 +38,12 @@ function addTweet(e) {
   // Add delete button tweet
   li.appendChild(deleteButton)
   tweetsList.appendChild(li)
+}
+
+function deleteTweet(e) {
+  e.preventDefault()
+  if(e.target.className === 'delete-tweet') {
+    e.target.parentElement.remove()
+    alert('Tweet Deleted')
+  }
 }
